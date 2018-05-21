@@ -1,25 +1,18 @@
 require("dotenv").config();
+var keys = require('./keys.js');
 //////////////////////////////////////////////////////////////////////////////////////
 
 // Spotify keys and junk
 var Spotify = require('node-spotify-api');
- 
-var spotify = new Spotify({
-  id: process.env.SPOTIFY_ID,
-  secret: process.env.SPOTIFY_SECRET
-});
+
+var spotify = new Spotify(keys.spotify);
 //////////////////////////////////////////////////////////////////////////////////////
 
 
 // Twitter keys and junk
 var Twitter = require('twitter');
  
-var client = new Twitter({
-    consumer_key: process.env.TWITTER_CONSUMER_KEY,
-    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-    access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
-    access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-});
+var client = new Twitter(keys.twitter);
 //////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -83,28 +76,34 @@ function spotifyMe(userInput) {
     console.log("Your song search was: " + userInput);
     console.log("==========Loading==========")
 
+    if (userInput === "") {
+        console.log("You should type in a song next time!");
+    } else {
+
     // Spotify search method
     spotify.search({ 
         type: 'track', 
         limit: 1,
         query: userInput 
         }, function(error, spotifyData) {
-           
-        if (error) {
-            return console.log('Error occurred: ' + error);
-        } else {
-    
-        // Results of Spotify Search
 
-        // console.log(JSON.stringify(spotifyData, null, 3));
-        console.log("==========Results==========")
-        console.log("Song Title: " + spotifyData.tracks.items[0].name);
-        console.log("Artist: " + spotifyData.tracks.items[0].artists[0].name);
-        console.log("Album: " + spotifyData.tracks.items[0].album.name);
-        console.log("Preview Link: " + spotifyData.tracks.items[0].preview_url);
-        console.log("==========End==========")
-        }
-    });
+        if (!error && response.statusCode === 200 ) {
+            return console.log('Error occurred: ' + error);
+         
+            } else {
+        
+            // Results of Spotify Search
+
+            // console.log(JSON.stringify(spotifyData, null, 3));
+            console.log("==========Results==========")
+            console.log("Song Title: " + spotifyData.tracks.items[0].name);
+            console.log("Artist: " + spotifyData.tracks.items[0].artists[0].name);
+            console.log("Album: " + spotifyData.tracks.items[0].album.name);
+            console.log("Preview Link: " + spotifyData.tracks.items[0].preview_url);
+            console.log("==========End==========")
+            }
+        });
+    }
 }
   
 ///////////////////////////////////////////
@@ -120,9 +119,9 @@ function twitterMe(userInput) {
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
         if (error) {
             return console.log('Error occurred: ' + error);
-            
+
         } else {
-        
+           
         // forloop for the last 7 tweets
             for (var i=0; i < 7; i++) {
 
@@ -130,6 +129,7 @@ function twitterMe(userInput) {
                 console.log("===========================")
                 console.log("Date: " + tweets[i].created_at);
                 console.log("Content: " + tweets[i].text);
+                console.log("==========End==========")
             }
         }
     });
@@ -169,7 +169,8 @@ function movieMe(userInput) {
             console.log("IMDB Rating: " + JSON.parse(movieData).Ratings[0].Value);
             console.log("Rotten Tomatoes Rating: " + JSON.parse(movieData).Ratings[1].Value);
             console.log("===========Plot==========="); 
-            console.log("Plot: " + JSON.parse(movieData).Plot);   
+            console.log("Plot: " + JSON.parse(movieData).Plot);
+            console.log("==========End==========")   
             }
         } 
     });
