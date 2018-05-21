@@ -1,5 +1,5 @@
 require("dotenv").config();
-///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
 
 // Spotify keys and junk
 var Spotify = require('node-spotify-api');
@@ -8,7 +8,8 @@ var spotify = new Spotify({
   id: process.env.SPOTIFY_ID,
   secret: process.env.SPOTIFY_SECRET
 });
-///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
 
 // Twitter keys and junk
 var Twitter = require('twitter');
@@ -19,25 +20,36 @@ var client = new Twitter({
     access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
     access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
-///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
 
 // OMDB junk
 var request = require("request");
-///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+// FS junk
+var fs = require('file-system');
+var file = require('file-system');
+/////////////////////////////////////////////////////////////////////////////////////
+
+
+// User inputs handlers:
 
 // Turns user input into one string
 var operator = process.argv[2];
 var userInput = "";
 var nodeArgs = process.argv;
 
-for (var i = 3; i < nodeArgs.length; i++) {
-    if (i > 3 && i < nodeArgs.length) {
-        userInput = userInput + " " + nodeArgs[i];
-    } else {
-        userInput += nodeArgs[i];
+    // forloop to turn user input argv[2] and greater into one string
+    for (var i = 3; i < nodeArgs.length; i++) {
+        if (i > 3 && i < nodeArgs.length) {
+            userInput = userInput + " " + nodeArgs[i];
+        } else {
+            userInput += nodeArgs[i];
+        }
     }
-}
-///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
 
 // Controller
 switch (operator) {
@@ -53,17 +65,14 @@ switch (operator) {
         movieMe(userInput);
         break;
 
-    // case "do-what-it-says":
-    //     doMe();
-    //     break;
-        
+    case "do-what-it-says":
+        doMe();
+        break;
 }
-
 
 ///////////////////////////////////////////
 // Functions///////////////////////////////
 ///////////////////////////////////////////
-
 
 ///////////////////////////////////////////
 // Spotify Search//////////////////////////
@@ -83,9 +92,9 @@ function spotifyMe(userInput) {
            
         if (error) {
             return console.log('Error occurred: ' + error);
-        }
+        } else {
     
-        // Spotfiy Response:
+        // Results of Spotify Search
 
         // console.log(JSON.stringify(spotifyData, null, 3));
         console.log("==========Results==========")
@@ -94,28 +103,34 @@ function spotifyMe(userInput) {
         console.log("Album: " + spotifyData.tracks.items[0].album.name);
         console.log("Preview Link: " + spotifyData.tracks.items[0].preview_url);
         console.log("==========End==========")
+        }
     });
 }
   
 ///////////////////////////////////////////
 // Twitter Search//////////////////////////
 ///////////////////////////////////////////
-
 function twitterMe(userInput) {
 
+    // Initial console log
     console.log("Your most recent Tweets: ")
 
+    // Twitter search method
     var params = {whothatchineze: 'nodejs'};
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
         if (error) {
             return console.log('Error occurred: ' + error);
             
-        }
-        for (var i=0; i < 7; i++) {
+        } else {
+        
+        // forloop for the last 7 tweets
+            for (var i=0; i < 7; i++) {
 
-            console.log("===========================")
-            console.log("Date: " + tweets[i].created_at);
-            console.log("Content: " + tweets[i].text);
+                // Results of the search
+                console.log("===========================")
+                console.log("Date: " + tweets[i].created_at);
+                console.log("Content: " + tweets[i].text);
+            }
         }
     });
 }
@@ -123,21 +138,24 @@ function twitterMe(userInput) {
 ///////////////////////////////////////////
 // Movie Search////////////////////////////
 ///////////////////////////////////////////
-
 function movieMe(userInput) {
 
+    // Initial console log
     console.log("Your movie search was: " + userInput);
     console.log("==========Loading==========");
 
+    // OMDB search method
     request("http://www.omdbapi.com/?t=" + userInput + "&y=&plot=short&apikey=trilogy", function(error, response, movieData) {
 
         if (!error && response.statusCode === 200 ) {
 
+            // Nested If statement in case user does not enter a string
             if (userInput === "") {
                 console.log("Since you didn't pick a movie, you should try watching Mr. Nobody");
                 console.log("Link: http://www.imdb.com/title/tt0485947/")
                 console.log("It's on Netflix!");
 
+            // Results of the search
             } else { 
             // console.log(JSON.parse(movieData));
 
@@ -157,3 +175,28 @@ function movieMe(userInput) {
     });
 }
 
+///////////////////////////////////////////
+// FS Function ////////////////////////////
+///////////////////////////////////////////
+function doMe(userInput) {
+
+    console.log("Just do what it says and no one will get hurt");
+
+    fs.readFile('random.txt', "utf-8", function(error, fileData) {
+
+        if (error) {
+            return console.log('Error occurred: ' + error);
+            
+        } else {
+
+            // console.log(fileData);
+
+            // Split entire string into array
+            var dataArr = fileData.split(",");
+            console.log(dataArr);
+
+            spotifyMe(dataArr[1], dataArr[2]);
+        
+        }
+    })
+}
