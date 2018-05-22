@@ -87,7 +87,7 @@ function spotifyMe(userInput) {
         query: userInput 
         }, function(error, spotifyData) {
 
-        if (!error && response.statusCode === 200 ) {
+        if (error) {
             return console.log('Error occurred: ' + error);
          
             } else {
