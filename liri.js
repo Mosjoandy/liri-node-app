@@ -1,5 +1,6 @@
 require("dotenv").config();
 var keys = require('./keys.js');
+var fs = require("fs");
 //////////////////////////////////////////////////////////////////////////////////////
 
 // Spotify keys and junk
@@ -51,7 +52,7 @@ switch (operator) {
         break;
 
     case "my-tweets":
-        twitterMe(userInput);
+        twitterMe();
         break;
     
     case "movie-this":
@@ -101,6 +102,20 @@ function spotifyMe(userInput) {
             console.log("Album: " + spotifyData.tracks.items[0].album.name);
             console.log("Preview Link: " + spotifyData.tracks.items[0].preview_url);
             console.log("==========End==========")
+
+            var appendArray = [
+                "\n===========================",
+                "\nSong Title: " + spotifyData.tracks.items[0].name,
+                "\nArtist: " + spotifyData.tracks.items[0].artists[0].name,
+                "\nAlbum: " + spotifyData.tracks.items[0].album.name,
+                "\nPreview Link: " + spotifyData.tracks.items[0].preview_url
+            ].join("\n")
+
+                fs.appendFile("log.txt", appendArray, function(error) {
+                    if (error) {
+                        return error;
+                    }
+                });
             }
         });
     }
@@ -109,10 +124,11 @@ function spotifyMe(userInput) {
 ///////////////////////////////////////////
 // Twitter Search//////////////////////////
 ///////////////////////////////////////////
-function twitterMe(userInput) {
+function twitterMe() {
 
     // Initial console log
     console.log("Your most recent Tweets: ")
+    console.log("==========Loading==========");
 
     // Twitter search method
     var params = {whothatchineze: 'nodejs'};
@@ -125,11 +141,24 @@ function twitterMe(userInput) {
         // forloop for the last 7 tweets
             for (var i=0; i < 7; i++) {
 
+
                 // Results of the search
                 console.log("===========================")
                 console.log("Date: " + tweets[i].created_at);
                 console.log("Content: " + tweets[i].text);
                 console.log("==========End==========")
+
+                var appendArray = [
+                    "\n===========================",
+                    "\nDate: " + tweets[i].created_at,
+                    "\nContent: " + tweets[i].text
+                ].join("\n");
+
+                fs.appendFile("log.txt", appendArray, function(error) {
+                    if (error) {
+                        return error;
+                    }
+                });
             }
         }
     });
@@ -147,7 +176,10 @@ function movieMe(userInput) {
     // OMDB search method
     request("http://www.omdbapi.com/?t=" + userInput + "&y=&plot=short&apikey=trilogy", function(error, response, movieData) {
 
-        if (!error && response.statusCode === 200 ) {
+        if (error) {
+            return console.log("You have an Error: " + error);
+
+        } else {
 
             // Nested If statement in case user does not enter a string
             if (userInput === "") {
@@ -159,20 +191,38 @@ function movieMe(userInput) {
             } else { 
             // console.log(JSON.parse(movieData));
 
-            console.log("===========Movie Details===========");
-            console.log("Title: " + JSON.parse(movieData).Title);
-            console.log("Date Released: " + JSON.parse(movieData).Released);
-            console.log("Actors: " + JSON.parse(movieData).Actors);
-            console.log("Language: " + JSON.parse(movieData).Language);
-            console.log("Produced In: " + JSON.parse(movieData).Country);
-            console.log("===========Ratings===========");
-            console.log("IMDB Rating: " + JSON.parse(movieData).Ratings[0].Value);
-            console.log("Rotten Tomatoes Rating: " + JSON.parse(movieData).Ratings[1].Value);
-            console.log("===========Plot==========="); 
-            console.log("Plot: " + JSON.parse(movieData).Plot);
-            console.log("==========End==========")   
+                console.log("===========Movie Details===========");
+                console.log("Title: " + JSON.parse(movieData).Title);
+                console.log("Date Released: " + JSON.parse(movieData).Released);
+                console.log("Actors: " + JSON.parse(movieData).Actors);
+                console.log("Language: " + JSON.parse(movieData).Language);
+                console.log("Produced In: " + JSON.parse(movieData).Country);
+                console.log("===========Ratings===========");
+                console.log("IMDB Rating: " + JSON.parse(movieData).Ratings[0].Value);
+                console.log("Rotten Tomatoes Rating: " + JSON.parse(movieData).Ratings[1].Value);
+                console.log("===========Plot==========="); 
+                console.log("Plot: " + JSON.parse(movieData).Plot);
+                console.log("==========End==========")   
+
+                var appendArray = [
+                    "\n===========================",
+                    "\nTitle: " + JSON.parse(movieData).Title,
+                    "\nDate Released: " + JSON.parse(movieData).Released,
+                    "\nActors: " + JSON.parse(movieData).Actors,
+                    "\nLanguage: " + JSON.parse(movieData).Language,
+                    "\nProduced In: " + JSON.parse(movieData).Country,
+                    "\nIMDB Rating: " + JSON.parse(movieData).Ratings[0].Value,
+                    "\nRotten Tomatoes Rating: " + JSON.parse(movieData).Ratings[1].Value,
+                    "\nPlot: " + JSON.parse(movieData).Plot
+                ].join("\n")
+
+                fs.appendFile("log.txt", appendArray, function(error) {
+                    if (error) {
+                        return error;
+                    }
+                });
             }
-        } 
+        }
     });
 }
 

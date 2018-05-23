@@ -11,10 +11,10 @@ Using only node.js, this program utilizes only the terminal. Using the command "
 
 - The user inputs "node liri.js" first
 - The user has two more inputs to follow, "node liri.js 'operator' 'desired input'". There are four possible operators:
-    - my-tweets null <br> <img src="https://cdn.discordapp.com/attachments/446103300069392385/448269528468684801/unknown.png">
-    - movie-this moviename <br> <img src="https://cdn.discordapp.com/attachments/446103300069392385/448269405139501096/unknown.png">
-    - spotify-this-song songname <br> <img src="https://cdn.discordapp.com/attachments/446103300069392385/448269798237798410/unknown.png">
-    - do-what-it-says <br> <img src="https://cdn.discordapp.com/attachments/446103300069392385/448269995143856129/unknown.png">
+    - my-tweets null <br> <img src="https://cdn.discordapp.com/attachments/446103300069392385/448269528468684801/unknown.png"> * * *
+    - movie-this moviename <br> <img src="https://cdn.discordapp.com/attachments/446103300069392385/448269405139501096/unknown.png"> * * *
+    - spotify-this-song songname <br> <img src="https://cdn.discordapp.com/attachments/446103300069392385/448269798237798410/unknown.png"> * * *
+    - do-what-it-says <br> <img src="https://cdn.discordapp.com/attachments/446103300069392385/448269995143856129/unknown.png"> * * *
 
 ## Techonologies
 
