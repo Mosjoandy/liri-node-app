@@ -1,4 +1,4 @@
-console.log('Keys Acknowledged');
+console.log('Keys Acknowledged \n Commands: \n node liri.js spotify-this-song song name \n node liri.js my-tweets \n node liri.js movie-this movie name \n node liri.js do-what-it-says' );
 
 exports.twitter = {
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
